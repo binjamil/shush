@@ -45,9 +45,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  CountdownTimer countdownTimer = CountdownTimer(timerDuration: 30);
+  CountdownTimer countdownTimer = CountdownTimer(
+    timerDuration: 30,
+  );
 
   void _changeTheme(bool) {
+    setState(() {
+     countdownTimer = CountdownTimer(timerDuration: 30,); 
+    });
     DynamicTheme.of(context).setBrightness(
         Theme.of(context).brightness == Brightness.dark
             ? Brightness.light
@@ -100,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text('30 seconds'),
                   onPressed: () {
                     setState(() {
+                      countdownTimer = null;
                       countdownTimer = CountdownTimer(
                         timerDuration: 30,
                       );
@@ -113,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text('1 minute'),
                   onPressed: () {
                     setState(() {
+                      countdownTimer = null;
                       countdownTimer = CountdownTimer(
                         timerDuration: 60,
                       );
@@ -126,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text('2 minutes'),
                   onPressed: () {
                     setState(() {
+                      countdownTimer = null;
                       countdownTimer = CountdownTimer(
                         timerDuration: 120,
                       );

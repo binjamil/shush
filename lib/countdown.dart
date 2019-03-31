@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'dart:math' as math;
+import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 class CountdownTimer extends StatefulWidget {
   CountdownTimer({this.timerDuration});
@@ -15,20 +17,45 @@ class CountdownTimerState extends State<CountdownTimer>
     with TickerProviderStateMixin {
   AnimationController controller;
 
+  AudioPlayer player;
+  AudioCache audioCache;
+
   String get timerString {
     Duration duration = controller.duration * controller.value;
     return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
+  void didUpdateWidget(CountdownTimer oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    player.stop();
+  }
+
+  @override
   void initState() {
     super.initState();
-    print('state init');
+    initPlayer();
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: widget.timerDuration),
       value: 1.0,
-    );
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          player.stop();
+        }
+      });
+  }
+
+  void initPlayer() {
+    player = new AudioPlayer();
+    audioCache = new AudioCache(fixedPlayer: player);
+
+    player.onAudioPositionChanged.listen((Duration p) {
+      if (p.inSeconds == widget.timerDuration) {
+          player.stop();
+        }
+    });
   }
 
   @override
@@ -36,7 +63,8 @@ class CountdownTimerState extends State<CountdownTimer>
     // TODO: implement dispose
     super.dispose();
     print('state dispose');
-    controller.dispose();
+
+    //controller.dispose();
   }
 
   @override
@@ -55,6 +83,7 @@ class CountdownTimerState extends State<CountdownTimer>
             if (controller.isAnimating) {
               //controller.stop();
             } else {
+              audioCache.play("audio.mp3");
               controller.reverse(
                   from: controller.value == 0.0 ? 1.0 : controller.value);
             }
