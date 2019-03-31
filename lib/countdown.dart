@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:developer';
 import 'dart:math' as math;
 
 class CountdownTimer extends StatefulWidget {
@@ -22,22 +23,38 @@ class CountdownTimerState extends State<CountdownTimer>
   @override
   void initState() {
     super.initState();
+    print('state init');
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: widget.timerDuration),
+      value: 1.0,
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('state dispose');
+    controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: widget.timerDuration),
+      value: 1.0,
+    );
+
     return Padding(
         padding: EdgeInsets.all(16.0),
         child: GestureDetector(
           onTap: () {
-            if (controller.isAnimating)
-              controller.stop();
-            else {
+            if (controller.isAnimating) {
+              //controller.stop();
+            } else {
               controller.reverse(
                   from: controller.value == 0.0 ? 1.0 : controller.value);
             }

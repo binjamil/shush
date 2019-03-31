@@ -45,25 +45,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int duration;
+  CountdownTimer countdownTimer = CountdownTimer(timerDuration: 30);
 
   void _changeTheme(bool) {
     DynamicTheme.of(context).setBrightness(
         Theme.of(context).brightness == Brightness.dark
             ? Brightness.light
             : Brightness.dark);
-  }
-
-  void _setTimer(int seconds) {
-    setState(() {
-      duration = seconds;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    duration = 10;
   }
 
   @override
@@ -102,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
               child: Center(
-                child: CountdownTimer(timerDuration: duration,),
+                child: countdownTimer,
               ),
             ),
             Row(
@@ -112,7 +100,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text('30 seconds'),
                   onPressed: () {
                     setState(() {
-                      duration = 30;
+                      countdownTimer = CountdownTimer(
+                        timerDuration: 30,
+                      );
                     });
                   },
                   color: Theme.of(context).accentColor,
@@ -121,14 +111,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 RaisedButton(
                   child: Text('1 minute'),
-                  onPressed: () => _setTimer(60),
+                  onPressed: () {
+                    setState(() {
+                      countdownTimer = CountdownTimer(
+                        timerDuration: 60,
+                      );
+                    });
+                  },
                   color: Theme.of(context).accentColor,
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0)),
                 ),
                 RaisedButton(
                   child: Text('2 minutes'),
-                  onPressed: () => _setTimer(120),
+                  onPressed: () {
+                    setState(() {
+                      countdownTimer = CountdownTimer(
+                        timerDuration: 120,
+                      );
+                    });
+                  },
                   color: Theme.of(context).accentColor,
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0)),
